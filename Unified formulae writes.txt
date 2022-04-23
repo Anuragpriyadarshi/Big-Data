@@ -1,0 +1,40 @@
+package sparkpack
+
+import org.apache.spark._
+import sys.process._
+import org.apache.spark.SparkConf
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+
+
+object sparkobj {
+
+case class schema(txnno:String, txndate:String, custno:String, amount:String, category:String, product:String,city:String, state:String, spendby:String)
+def main(args:Array[String]):Unit=
+
+{
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+
+				sc.setLogLevel("ERROR")
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+
+				val jsondf = spark.read.format("json").load("file:///C:/data/devices.json")
+				jsondf.show()
+
+				jsondf.write.format("parquet").save("file:///C:/data/parquetdata")
+
+				println("===parquet written==")
+
+				jsondf.write.format("csv").option("header","true").option("delimiter","~").save("file:///C:/data/csvdata")
+
+				println("===csv written==")
+
+
+}
+}

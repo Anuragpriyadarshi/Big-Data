@@ -1,0 +1,113 @@
+Task 1 --- Using zeyodata1.txt
+Find the sum of amount (total), count of Product (procount)
+
+====================================================================
+solution
+========================================================================
+package sparkpack
+import org.apache.spark.sql.functions._
+
+import org.apache.spark._
+import org.apache.spark.sql.functions._
+import sys.process._
+import org.apache.spark.SparkConf
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+
+
+object sparkobj {
+
+case class schema(txnno:String, txndate:String, custno:String, amount:String, category:String, product:String,city:String, state:String, spendby:String)
+def main(args:Array[String]):Unit=
+
+{
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+
+				sc.setLogLevel("ERROR")
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+
+				val df= spark.read.format("csv").option("header","true").load("file:///c:/data/zeyodata1.txt")
+				df.show()
+				
+				println("================Processed data===========================================")
+				val procdf=df.groupBy("name").agg(sum("amount").alias("total"),count("product").alias("product count"))
+				procdf.show()
+}
+}
+
+
+
+Task 2 ---- read txns_head
+	    groupby category
+	    agg sum of amount alias total
+		
+		
+====================================================================
+solution
+========================================================================
+
+package sparkpack
+import org.apache.spark.sql.functions._
+
+import org.apache.spark._
+import org.apache.spark.sql.functions._
+import sys.process._
+import org.apache.spark.SparkConf
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+
+
+object sparkobj {
+
+case class schema(txnno:String, txndate:String, custno:String, amount:String, category:String, product:String,city:String, state:String, spendby:String)
+def main(args:Array[String]):Unit=
+
+{
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+
+				sc.setLogLevel("ERROR")
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+
+				val df=spark.read.format("csv").
+				option("Header","true")
+				.option("delimiter","~")
+				.load("file:///C:/Data/txns_head")
+				df.show()
+				
+				println("================Processed data===========================================")
+				val procdf=df.groupBy("category").agg(sum("amount").alias("total"))
+				procdf.show()
+}
+}
+
+==========================================================================================================================================================
+
+Find the total amount for each product and for the different type of mode payments (spendby) under gymnastics' category and order the total from smallest ?
+
+order by asc on total
+filter(category="Gymnastics")
+agg(sum("amount"))
+groupby("product","spendby")
+
+==================================================================================
+=======================================================================================
+
+val resultdf = df.filter(col("category")==="Gymnastics")
+					                  .groupBy("product","spendby")
+					                  .agg(sum("amount").as("total"))
+					                  
+					                  .orderBy(col("total"))
+					                 
+					resultdf.show()

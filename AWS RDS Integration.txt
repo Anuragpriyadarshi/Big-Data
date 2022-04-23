@@ -1,0 +1,14 @@
+READ
+========================================================================================================================
+
+
+
+val sqldf = spark.read.format("jdbc")
+					.option("driver","com.mysql.jdbc.Driver")
+					.option("url","jdbc:mysql://zeyodb.chwk6wgpdls3.ap-south-1.rds.amazonaws.com:3306/zeyodata")
+					.option("dbtable","cashdata")
+					.option("user","root")
+					.option("password","Aditya908")
+					.load()
+					
+					sqldf.show()

@@ -1,0 +1,57 @@
+Scenario  ----
+
+Read txnsd.txt
+Convert that to rowrdd  
+Using Rowrdd filter third index == Gymnastics --- No case class 
+Define schema txnno,txndate,category using structType
+Convert that to dataframe  =--- spark.createDataFrame( rowrdd,structtype)
+show it
+
+
+===============================================================================================
+Solution
+===============================================================================================
+package sparkpack
+
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+
+
+object sparkobj {
+
+case class schema(txnno:String, txndate:String, custno:String, amount:String, category:String, product:String,city:String, state:String, spendby:String)
+def main(args:Array[String]):Unit=
+
+{
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+
+				sc.setLogLevel("ERROR")
+
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+				val data = sc.textFile("file:///C:/data/txnsd.txt")
+				data.foreach(println)
+				val mapsplit= data.map( x => x.split(",") )
+				val rowrdd= mapsplit.map(x=>Row(x(0),x(1),x(2)))
+				rowrdd.foreach(println)
+				val filterrowrdd=rowrdd.filter(x=>x(2).toString().contains("Gymnastics"))
+				println("=====================================Row RDD Filter==============-")
+				filterrowrdd.foreach(println)
+				val schemastruct=new StructType()
+				.add("txnno",StringType)
+				.add("txndate",StringType)
+				.add("category",StringType)
+				val df=spark.createDataFrame(filterrowrdd,schemastruct)
+				df.show()
+
+
+
+}
+}

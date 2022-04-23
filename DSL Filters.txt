@@ -1,0 +1,44 @@
+import org.apache.spark.sql.functions._
+This import statement needs to be imported for col to work
+
+1) Read txns_head with header true and filter category='Gymnastics'
+
+val filterdf = df.filter(col("category") === "Gymnastics")
+
+2) Read txns_head with header true and filter category='Gymnastics' and spendby='cash' -- Multi COlumn Filter
+
+
+val filterdf = df.filter(col("category") === "Gymnastics" && col("spendby")  === "cash")
+
+
+3) Filter category = 'Gymnastics' and category = 'Team Sports'  -- Multi Value Filter for the same Column ----- IN Operator
+
+val filterdf = df.filter(col("category").isin("Gymnastics","Team Sports"))
+
+4) Filter category not equals Gymnastics
+
+			!col("category") === "Gymnastics"
+
+5) Filter product      Contains   Gymnastics
+				
+							(col("category")==="Gymnastics")
+							&&
+							(col("product") like ("%Gymnastics%"))
+
+
+6) FIltering Null Values
+
+			val filternul = df.filter( col("name").isNull)
+			Not Null
+			val filternul = df.filter( !col("name").isNull)
+			
+			
+7)	Read txns_head--- 
+
+		Filter category ="Gymnastics"
+		select all the Columns but ensure txndate column should consist only year
+			
+			
+			
+			
+			
