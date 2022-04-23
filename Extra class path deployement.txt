@@ -1,0 +1,18 @@
+
+ping google.com  =====> 
+
+cd
+mkdir /home/cloudera/avjar
+cd /home/cloudera/avjar
+wget https://repo1.maven.org/maven2/com/databricks/spark-avro_2.11/4.0.0/spark-avro_2.11-4.0.0.jar
+
+ping google.com Not working  =====>
+
+Click link https://repo1.maven.org/maven2/com/databricks/spark-avro_2.11/4.0.0/spark-avro_2.11-4.0.0.jar in windows
+Login using winscp
+Create folder at /home/cloudera/ as avjar
+Copy that download jar to this path
+
+spark-shell --jars /home/cloudera/avjar/spark-avro_2.11-4.0.0.jar
+val df = spark.read.format("csv").load("file:///home/cloudera/data/txns")
+df.write.format("com.databricks.spark.avro").mode("overwrite").save("/user/cloudera/avrodir")
