@@ -1,0 +1,88 @@
+package sparkpack
+
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
+
+object sparkobj {
+  
+  case class schema(txnno:String , category:String, product:String)
+  def main(args:Array[String]):Unit=
+  
+  {
+    
+					val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+					val sc = new SparkContext(conf)
+
+					sc.setLogLevel("ERROR")
+    
+   println("================RDD String ======")
+					
+					val data = sc.textFile("file:///C:/data/txnsmall.txt")
+					
+					println("===============raw data===========")
+					
+					data.foreach(println)
+					
+				println("================Filtered data String ======")	
+				
+				val gymdata = data.filter(x=>x.contains("Gymnastics"))
+					
+				gymdata.foreach(println)
+					
+			println("================Schema RDD Filters ======")
+			
+			 val mapsplit=data.map(x=>x.split(","))
+			 val schemardd=mapsplit.map(x=>schema(x(0),x(1),x(2)))
+			 val filterschema=schemardd.filter(x=>x.product.contains("Gymnastics"))
+			  filterschema.foreach(println)
+					
+  }
+}
+
+=======================================================================================================================================================
+Direct conversion to DataFrame
+=======================================================================================================================================================
+Inside Object 
+
+
+
+case class schema( txnno:String , category:String ,product:String )
+
+def main(args:Array[String]):Unit={
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+				sc.setLogLevel("ERROR")
+
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+
+
+				val data = sc.textFile("file:///C:/data/txnsmall.txt")
+				data.foreach(println)
+				
+				
+				val mapsplit= data.map( x => x.split(",") )
+
+				val schemardd = mapsplit.map( x => schema ( x(0),x(1),x(2)))
+				
+				val df = schemardd.toDF()
+
+				df.show()
+				
+				
+				df.createOrReplaceTempView("zeyodf")
+				
+				
+				val df1 = spark.sql("select * from zeyodf where category='Gymnastics'")
+				
+				df1.show()
+				
+				
+				
+
+
+}

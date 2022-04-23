@@ -1,0 +1,74 @@
+You have a file known as usdata.csv 
+Has lot data
+Read the file usdata.csv  
+Iterate each line and filter length>200 size 
+After filter ---- FlatMap with delimiter comma 
+Concat each line of flattend data with ,Zeyo
+Iterach each element and Replace - (Hyphone) with nothing 
+Write the result to a textfile
+
+=========================================================================================================================
+
+package SparkPackApp
+
+import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
+
+object SparkObjApp1 {
+	def main(args:Array[String]):Unit={
+
+			val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+					val sc = new SparkContext(conf)
+					sc.setLogLevel("ERROR")
+
+					println("================RDD String ======")
+					
+					val data = sc.textFile("file:///C:/data/usdata.csv")
+					
+					println("===============raw data===========")
+					
+					data.take(10).foreach(println)
+					
+					println("============lengthdata==========================")
+					
+					val lendata = data.filter( x => x.length()> 200)
+					
+					lendata.foreach(println)
+					
+					println("=============flat data=========================")
+					
+					val flatdata = lendata.flatMap( x => x.split(",") )
+					
+					flatdata.foreach(println)
+					
+					println("=====================map comma===================")
+					
+					val mapdata = flatdata.map( x => x+",zeyo")
+					
+					mapdata.foreach(println)
+					
+					
+					println("====================map replace===============")
+					
+					val mapdata2 = mapdata.map( x => x.replace("-", ""))
+					
+					
+					mapdata2.foreach(println)
+					
+					
+					mapdata2.coalesce(1).saveAsTextFile("file:///C:/data/batch31out2")
+					
+					println("===data written======")
+					
+					
+					
+					
+					
+					
+					
+					
+	}
+
+}
+
+
