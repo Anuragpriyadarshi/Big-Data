@@ -1,0 +1,25 @@
+=============
+Go to hive
+=============
+
+Create database catdb; 
+Use catdb;
+
+create table txntab(txnno int, txndate string,category string) row format delimited fields terminated by ',';
+load data local inpath '/home/cloudera/data1/txnsd.txt' into table txntab;
+select * from txntab;
+
+
+=============
+Edge Node
+=============
+
+
+hadoop fs -ls /user/hive/warehouse/
+hadoop fs -ls /user/hive/warehouse/catdb.db
+hadoop fs -ls /user/hive/warehouse/catdb.db/txntab
+
+
+=======================================================================
+If you want to load from HDFS
+Remove local from load statement

@@ -1,0 +1,45 @@
+2005 --- Hadoop (HDFS and MR)
+2006 -- Hadoop Apache 
+2007 --
+2008 -- Hive, Pig 
+
+2009
+Mapreduce === Hive
+
+Hive is not much Customizable (Back end Mapreduce)
+Mapreduce is a damn (Very Complex)
+Mapreduce started showing Huge time for large data processing
+Mapreduce cannot support Streaming
+I cannot support Machine learning
+I am a java GUY
+I dont Support SQL ( Run java Code )
+I cannot handle semi structured Data easily
+I cannot integrate much with Other environment Cloud 
+.
+.
+.
+.
+.
+.
+
+
+Why Spark is popular and Successful ?
+
+1) Spark is Faster than mapreduce
+2) Spark is Customizable
+3) Spark is not only java also scala,Python,R
+4) Spark is an inmemory processing Tool (RAM Processing)
+5) Spark is environment Independent (Windows,Linux,HDFS,s3,Google FS,blob)
+6) Spark has a very good Cloud Support
+7) Spark can be handled with SQL queries ( Powerful )
+8) Spark supports Machine learning 
+9) Spark supports Streaming as well
+10) Spark uses a single Formulae to integrate with many systems
+
+WindowsFS,Linux,Hive,Mongo,Hbase,aws s3,blob storage,Kafka,Cassandra,RabbitMQ,Elastic Search,Mysql
+
+11) Read and Writes  --- GET DO PUT  ---- GET-- SQOOP ----- Do -- hive --- PUT-- SQOOP
+
+GET ---   DO   ---- PUT ----- Spark
+
+11) Spark can process complex data in a single Line

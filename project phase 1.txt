@@ -1,0 +1,53 @@
+===============
+Go to Mysql 
+===============
+
+Create a database projdb;
+use projdb;
+
+create table customer_src(id int(10),username varchar(100),sub_port varchar(100),host varchar(100),date_time varchar(100),hit_count_val_1 varchar(100),hit_count_val_2 varchar(100),hit_count_val_3 varchar(100),timezone varchar(100),method varchar(100),`procedure` varchar(100),value varchar(100),sub_product varchar(100),web_info varchar(100),status_code varchar(100));
+
+===============
+Edge Node
+===============
+
+Have file1.txt under /home/cloudera/
+
+
+==========================
+mysql
+==========================
+load data infile '/home/cloudera/file1.txt' into table customer_src fields terminated by ',';
+
+
+=============================
+Edge Node
+=============================
+mkdir /home/cloudera/avscsrcdir
+cd /home/cloudera/avscsrcdir
+
+sqoop import --connect jdbc:mysql://localhost/projdb --username root --password cloudera  -m 1 --table customer_src  --target-dir /user/cloudera/customer_stage_loc --incremental append --check-column id --last-value 0 --as-avrodatafile
+
+
+hadoop fs -mkdir /user/cloudera/avscpdir
+hadoop fs -put /home/cloudera/avscsrcdir/customer_src.avsc /user/cloudera/avscpdir
+
+
+====================================
+Hive shell
+====================================
+
+
+create database projdb;
+use projdb;
+
+create  table customer_src   ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe' STORED AS AVRO LOCATION '/user/cloudera/customer_stage_loc'  TBLPROPERTIES ('avro.schema.url'='/user/cloudera/avscpdir/customer_src.avsc');
+
+select * from customer_src;   === U will see the data
+
+
+create external table customer_target_tab partitioned by (current_day string,year string,month string,day string) ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe' STORED AS AVRO LOCATION '/user/cloudera/customer_target_tab'  TBLPROPERTIES ('avro.schema.url'='/user/cloudera/avscpdir/customer_src.avsc');
+
+select * from customer_target_tab;    ==== U will not see the data
+
+

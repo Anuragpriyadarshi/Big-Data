@@ -1,0 +1,16 @@
+Serializing 
+
+sqoop import --connect jdbc:mysql://localhost/test --username root -password cloudera -m 1 --table customermoda --delete-target-dir --target-dir /user/cloudera/data_parquet --as-parquetfile
+
+De-serializing
+
+From Edge Node -----
+
+spark-shell
+
+1.6.0
+sqlContext.read.format("parquet").load("/user/cloudera/data_parquet").show()
+
+2x version (2.3.1,2.4.7)
+
+spark.read.format("parquet").load("/user/cloudera/data_parquet").show()

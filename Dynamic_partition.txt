@@ -1,0 +1,20 @@
+Hive
+
+create database checkpart1;
+use checkpart1;
+
+create table dyn_part(id int,name string,check1 string) partitioned by (country string) row format delimited fields terminated by ',' location '/user/cloudera/dyn_part';
+
+create table stg1(id int,name string,check1 string,country string) row format delimited fields terminated by ',' location '/user/cloudera/stg1';
+
+load data local inpath '/home/cloudera/partdata/allcountry.csv' into table stg1;
+
+select * from stg1;
+
+insert into dyn_part partition(country) select id,name,check1,country from stg1;
+
+set hive.exec.dynamic.partition.mode=nonstrict;
+
+insert into dyn_part partition(country) select id,name,check1,country from stg1;
+
+!hadoop fs -ls /user/cloudera/dyn_part;

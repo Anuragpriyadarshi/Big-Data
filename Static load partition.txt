@@ -1,0 +1,23 @@
+Check in Edge Node
+
+ls /home/cloudera/partdata/
+
+Hive Shell
+
+create database partc;
+use partc;
+
+create table tar_part(id string,name string,check string) partitioned by (country string) row format delimited fields terminated by ','  location '/user/cloudera/tar_part';
+
+load data local inpath '/home/cloudera/partdata/INDTxns.csv' into table tar_part partition(country='INDIA');
+
+load data local inpath '/home/cloudera/partdata/UKTxns.csv' into table tar_part partition(country='UK');
+
+load data local inpath '/home/cloudera/partdata/USTxns.csv' into table tar_part partition(country='USA');
+
+
+!hadoop fs -ls /user/cloudera/tar_part;
+!hadoop fs -ls /user/cloudera/tar_part/country=INDIA;
+!hadoop fs -ls /user/cloudera/tar_part/country=UK;
+!hadoop fs -ls /user/cloudera/tar_part/country=USA;
+

@@ -1,0 +1,78 @@
+sqoop import --connect jdbc:mysql://localhost:3306/zeyodb --username root --password cloudera --table customermod -m 1 --delete-target-dir --target-dir /user/cloudera/firstimport
+
+
+Open two terminals
+==========================
+Connect to mysql  ----- Done
+==========================
+
+mysql -uroot -pcloudera
+
+==========================
+Create the database as zeyodb;  ----- Done
+==========================
+create database zeyodb;
+use zeyodb;
+
+==========================
+create the table as customermod;(6 columns) ----- Done
+
+==========================
+
+CREATE TABLE customermod(custid INT,firstname VARCHAR(20),lastname VARCHAR(20),city varchar(50));
+
+
+==========================
+Insert from dummy records----- Done
+
+==========================
+
+insert into customermod values(1,'Arun','Kumar','chennai');
+insert into customermod values(2,'srini','vasan','chennai');
+insert into customermod values(3,'vasu','devan','banglore');
+insert into customermod values(4,'mohamed','imran','hyderabad');
+insert into customermod values(5,'arun','basker','chennai');
+
+==========================
+Verify the data in mysql table----- Done
+==========================
+
+select * from customermod;
+
+======================================
+Come to Edge Node =
+========================================
+
+
+=================================
+Shoot it
+==============================
+
+sqoop import --connect jdbc:mysql://localhost:3306/zeyodb --username root --password cloudera --table customermod -m 1 --delete-target-dir --target-dir /user/cloudera/firstimport  
+
+================================
+Check the target directory
+================================
+
+hadoop fs -ls /user/cloudera/firstimport  
+hadoop fs -cat /user/cloudera/firstimport/part-m-00000
+
+==========================================================================
+
+hadoop dfsadmin -safemode leave
+
+======================================================================
+=========================================================================
+=======================================================================
+==============================================================================
+
+controlling imports:-
+
+1.Where 
+
+sqoop import --connect jdbc:mysql://localhost:3306/zeyodb --username root --password cloudera --table customermod -m 1 --where "city='chennai'" --delete-target-dir --target-dir /user/cloudera/chennaidata  
+
+2. Query
+
+sqoop import --connect jdbc:mysql://localhost:3306/zeyo1 --username root --password cloudera -m 1 --query "select a.*,b.age,b.createdt,b.transactamt from cust_tab1 a join cust_tab2 b on a.custid=b.custid where \$CONDITIONS"  --delete-target-dir --target-dir /user/cloudera/joindata
+

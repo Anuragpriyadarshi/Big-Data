@@ -1,0 +1,15 @@
+ Go to the first terminal where spark-shell  and execute below command
+
+val data = sc.textFile("file:///home/cloudera/data/txns")
+val gymdata = data.filter(x=>x.contains("Gymnastics"))
+gymdata.take(5).foreach(println)
+
+It should success
+
+--------------------------------------------------------------------------------------------------
+
+val data = sc.textFile("file:///home/cloudera/data/tapksdnflkansdlkfnaslknflkasndlfnaskldfnlasmdnflmasndflmasndflmanxns")
+val gymdata = data.filter(x=>x.contains("Gymnastics"))
+gymdata.take(5).foreach(println)
+
+It should fail

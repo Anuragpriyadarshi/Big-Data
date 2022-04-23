@@ -1,0 +1,36 @@
+Linux:--
+
+
+Know current directory:-
+pwd
+
+Show folders in directory:-
+ls
+
+Details of folders in directory:-
+ll
+
+Create a folder/directory:-
+mkdir folder name
+
+Go inside directory:-
+cd folder name
+
+Create an empty file:-
+touch filename
+
+Delete a file:-
+rm filename
+
+come one step back:-
+cd ..
+
+Delete directory:-
+rmdir directoryname
+
+Read a file:-
+cat filename
+
+Edit file:-
+vi filename
+#Note: File open as escape mode. So go to insert mode by clicking i. once editing is done, press escape to come to escape mode again. Press wq! to exit.

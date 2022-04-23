@@ -1,0 +1,135 @@
+==========================================================================================
+Filter : contains
+==========================================================================================
+package sparkpack
+
+object sparkobj {
+  def main(args:Array[String]):Unit=
+  
+  {
+    
+    
+    println("==Started===")
+    
+  val listchar= List ( "Anurag","Anu","Anuradha","Ranjan","Lalit","Anupam" )
+
+
+				listchar.foreach(println)
+	 println("======Filter=============")
+	 
+	 val listfil=listchar.filter(x=>x.contains("Anu"))
+	      listfil.foreach(println)
+    
+  }
+}
+==========================================================================================
+Adding suffix
+==========================================================================================
+package sparkpack
+
+object sparkobj {
+  def main(args:Array[String]):Unit=
+  
+  {
+    
+    
+    println("==Started===")
+    
+  val listchar= List ( "Anurag","Anu","Anuradha","Ranjan","Lalit","Anupam" )
+
+
+				listchar.foreach(println)
+	 println("======Filter=============")
+	 
+	 val listfil=listchar.filter(x=>x.contains("Anu"))
+	      listfil.foreach(println)
+    
+	  println("====Add suffix==============")
+	     val suffix=",Added"
+	     val mapadd=listfil.map(x=>x+suffix)
+	  mapadd.foreach(println)
+	  
+  }
+}
+==========================================================================================
+Replacing elements
+==========================================================================================
+
+
+package sparkpack
+
+object sparkobj {
+  def main(args:Array[String]):Unit=
+  
+  {
+    
+    
+    println("==Started===")
+    
+  val listchar= List ( "Anurag","Anu","Anuradha","Ranjan","Lalit","Anupam" )
+
+
+				listchar.foreach(println)
+	 println("======Filter=============")
+	 
+	 val listfil=listchar.filter(x=>x.contains("Anu"))
+	      listfil.foreach(println)
+    
+	  println("====Add suffix==============")
+	     val suffix=",Added"
+	     val mapadd=listfil.map(x=>x+suffix)
+	  mapadd.foreach(println)
+	  
+	  println("====Replace element==============")
+	   
+	   val mapreplacelist=mapadd.map(x=>x.replace("Added", "priyadarshi"))
+	       mapreplacelist.foreach(println)
+  }
+}
+
+==========================================================================================
+Flat MAP
+==========================================================================================
+ val list2=List("A~B" , "C~D" , "D~F" )
+	     println("====FlatMap==============")
+	     
+	    val mapflat=list2.flatMap(x=>x.split("~"))
+	    mapflat.foreach(println)
+		
+		
+		
+==========================================================================================
+use case 1
+==========================================================================================	
+		
+		
+package sparkpack
+
+object sparkobj {
+  def main(args:Array[String]):Unit=
+  
+  {
+    
+    
+    println("==Started===")
+    
+ val liststr=List( "azeyobron~analytics" , "zeyobron~bigdata" ,"hive~zeyo")
+ println("====FlatMap==============")
+ val firststep=liststr.flatMap(x=>x.split("~"))
+	    firststep.foreach(println)
+	    
+	    println("====Filter==============") 
+	    val listfil=firststep.filter(x=>x.contains("zeyo"))
+	      listfil.foreach(println)
+	    println("====Replace element==============")
+	   
+	   val mapreplacelist=listfil.map(x=>x.replace("zeyo", "Anurag"))
+	       mapreplacelist.foreach(println)
+	       
+	      
+			println("====Add suffix==============")
+	     val suffix=",priyadarshi"
+	     val mapadd=mapreplacelist.map(x=>x+suffix)
+	  mapadd.foreach(println)
+  }
+}

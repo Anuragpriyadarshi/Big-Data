@@ -1,0 +1,87 @@
+def main(args:Array[String]):Unit=
+  
+  {
+    
+    
+    println("==Started===")
+      
+    
+  }
+  
+  ======================================================================
+  
+  println("==Started===")
+    
+    val a=4
+    
+    println(a)
+	
+============================================================================
+println("==Started===")
+    
+    val a=4
+    
+    println(a)
+    
+    val b="zeyobron"
+    
+    println(b)
+	
+===========================================================================
+def main(args:Array[String]):Unit=
+  
+  {
+    
+   
+    
+    
+    println("==Started===")
+    
+    val a=4
+    
+    println(a)
+    
+    val b="zeyobron"
+    
+    println(b)
+           
+    
+  }
+  
+ ==================================================================================
+ println("==Started===")
+    
+    
+    val listint = List(1,2,3,4)
+    
+    listint.foreach(println)
+=====================================================================================
+println("==Started===")
+
+
+
+				println("====raw list====")
+
+				val listint= List ( 1 , 2 , 3 , 4 )
+
+				listint.foreach(println)
+
+				println("====Processed list====")
+
+				val proclist = listint.filter ( x  =>  x < 3 )
+
+				proclist.foreach(println)
+				
+==========================================================================================
+println("====raw list====")
+
+				val listint= List ( 1 , 2 , 3 , 4 )
+
+				listint.foreach(println)
+
+				println("====Processed list====")
+
+				val proclist = listint.map( x  => x * 5  )
+
+				proclist.foreach(println)
+============================================================================================

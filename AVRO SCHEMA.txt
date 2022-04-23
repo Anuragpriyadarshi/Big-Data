@@ -1,0 +1,58 @@
+
+=============================
+Mysql 
+=============================
+mysql -uroot -pcloudera
+create database avrcheck;
+use avrcheck;
+create table avtab3(id int,name varchar(100),amount varchar(100));
+insert into avtab3 values(1,'Sai','50');
+insert into avtab3 values(2,'Zeyo','40');
+
+=============================
+Edge Node
+=============================
+mkdir /home/cloudera/avdatas
+cd /home/cloudera/avdatas
+
+sqoop import --connect jdbc:mysql://localhost/avrcheck --username root -password cloudera --table avtab3 -m 1 --delete-target-dir --target-dir /user/cloudera/avdata --as-avrodatafile
+
+hadoop fs -mkdir /user/cloudera/avsdir
+hadoop fs -put avtab3.avsc /user/cloudera/avsdir
+
+
+
+=============================
+Hive shell
+=============================
+
+
+create external table hivetab_avro ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe' STORED AS AVRO LOCATION '/user/cloudera/avdata'  TBLPROPERTIES ('avro.schema.url'='/user/cloudera/avsdir/avtab3.avsc');
+
+
+select * from hivetab_avro;
+
+
+
+=============================
+Mysql
+=============================
+
+alter table avtab3 drop column name;
+
+select * from avtab3;
+insert into avtab3 values(3,'60');
+
+=============================
+Edge Node 
+=============================
+
+sqoop import --connect jdbc:mysql://localhost/avrcheck --username root -password cloudera --table avtab3 -m 1 --target-dir /user/cloudera/avdata --incremental append --check-column id --last-value 2 --as-avrodatafile
+
+
+
+=============================
+hive
+=============================
+
+select * from hivetab_avro;\

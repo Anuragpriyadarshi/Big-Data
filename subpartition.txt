@@ -1,0 +1,19 @@
+
+create table dyn_sub_part(id int,name string,check1 string) partitioned by (country string,mode string) row format delimited fields terminated by ',' location '/user/cloudera/dyn_sub_part';
+
+create table stg4(id int,name string,check1 string,mode string,country string) row format delimited fields terminated by ',' location '/user/cloudera/stg4';
+
+load data local inpath '/home/cloudera/partdata/allcountry1.csv' into table stg4;
+
+
+insert into dyn_sub_part partition(country,mode) select id,name,check1,country,mode from stg4;
+
+!hadoop fs -ls /user/cloudera/dyn_sub_part;
+!hadoop fs -ls /user/cloudera/dyn_sub_part/country=IND/;
+!hadoop fs -ls /user/cloudera/dyn_sub_part/country=IND/mode=cash;
+!hadoop fs -cat /user/cloudera/dyn_sub_part/country=IND/mode=cash/*;
+
+
+
+
+

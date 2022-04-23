@@ -1,0 +1,96 @@
+//importing required packages
+import java.util.Scanner;
+//Creating class for adding functinality 
+public class HCL{
+//main method
+public static void main(String args[] )  
+  {  
+        //declare and initialize firstRound, secondRound, and hrRound  
+        int firstRound = 0, secondRound=0, hrRound=0,Total=0;  
+          
+        //create scanner class object to get choice of user  
+        Scanner sc = new Scanner(System.in);  
+		
+		   while(true)  
+        {  
+            System.out.println("Recruitment Process");  
+            System.out.println("Select 1 for Round 1 points(Please give points between 0 to 50)");  
+            System.out.println("Select 2 for Round 2 points(Please give points between 0 to 50)");  
+            System.out.println("Select 3 for HR ROUND points(Please give points between 0 to 50)");  
+            System.out.println("Choose 4 for EXIT");  
+            System.out.print("Choose the operation you want to perform:"); 
+           
+		   //get choice from user  
+            int choice = sc.nextInt();  
+            switch(choice)  
+             {  
+                case 1:  
+                 System.out.print("Enter Points for firstRound: ");  
+				   //get the points from user 
+                   firstRound = sc.nextInt();  
+				   Total=Total+firstRound;
+				   if(firstRound >= 50)  
+                 {  
+             
+                   System.out.println("Good Performance. Promoted for second Round");  
+                 }  
+              else  
+		        {  
+                    //show custom error message   
+                   System.out.println("Please Prepare well and try again. Good luck!!");  
+                }  
+              System.out.println("");  
+              break;  
+			  
+			     case 2:  
+                      
+                   System.out.print("Enter Points for secondRound: ");  
+                      
+                   //get the points from user 
+                   secondRound = sc.nextInt();  
+                      
+                  //add the points to total  
+                    Total = Total + secondRound;  
+                    if(Total >= 80)  
+                 {  
+             
+                   System.out.println("Good Performance. Promoted for HR Round");  
+                 }  
+              else  
+		        {  
+                    //show custom error message   
+                   System.out.println("Promoted for HR Round: ");  
+                }   
+				System.out.println("");  
+                    break;  
+                      			
+				case 3:  
+                      
+                   System.out.print("Enter Points for HR Round: ");  
+                      
+                   //get the points from user 
+                   hrRound = sc.nextInt();  
+                      
+                  //add the points to total  
+                    Total = Total + hrRound;  
+                    if(Total >= 120)  
+                 {  
+             
+                   System.out.println("Congratulations!!!!! Welcome To HCL.");  
+                 }  
+              else  
+		        {  
+                    //show custom error message   
+                   System.out.println("Prepare well on your coding skills. We will Reschedule your Interview");  
+                }   
+				System.out.println("");  
+                    break;  
+					
+					  case 4:  
+                    //exit from the menu
+                      System.out.println("Thanks!!!");				
+                      System.exit(0); 
+					  }  
+        }  
+    }  
+}  

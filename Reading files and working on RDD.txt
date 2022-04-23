@@ -1,0 +1,98 @@
+==============================================
+Create eclipse new proj or use existing project
+==============================================
+
+==============================================
+Have Main Method
+==============================================
+	def main(args:Array[String]):Unit={
+
+				}
+==============================================
+Add spark jars
+==============================================
+
+==============================================
+RightClickProject ---- BuildPath- ConfigureBuildPath- Add external Jars -- Select all the jars then apply and Close
+==============================================
+
+==============================================
+Import the statements
+==============================================
+
+	import org.apache.spark.SparkContext
+	import org.apache.spark.SparkConf
+
+==============================================
+Add object Code
+==============================================
+
+					val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+					val sc = new SparkContext(conf)
+
+					sc.setLogLevel("ERROR")
+
+
+==============================================
+Add below code inside your Main method (Change the path according to your path)
+==============================================
+
+	val data = sc.textFile("file:///C:/data/regiondata.txt")
+
+==============================================
+Then print the data
+==============================================
+
+	data.foreach(println)
+
+==============================================
+Right Click and run scala application
+==============================================
+
+==============================================
+Then split the states and city into two separate list
+==============================================
+
+					println("================RDD String ======")
+
+					val data = sc.textFile("file:///C:/data/regiondata.txt")
+
+					data.foreach(println)
+
+
+					println("==================flat rdd=========")
+
+
+					val flatrdd = data.flatMap( x => x.split("~") )
+
+					flatrdd.foreach(println)
+
+
+					println("=======filter states=======")
+
+					val statesrdd = flatrdd.filter( x => x.contains("State"))
+
+					statesrdd.foreach(println)
+
+					println("=======filter Cities=======")
+
+
+					val cityrdd = flatrdd.filter( x => x.contains("City"))
+
+					cityrdd.foreach(println)
+
+
+					println("=========final states=======")
+
+
+
+					val finalstaterdd = statesrdd.map( x => x.replace("State->", ""))
+					finalstaterdd.foreach(println)
+
+
+					println("=========final cities=======")
+
+
+					val finalcityrdd = cityrdd.map( x => x.replace("City->", ""))
+
+					finalcityrdd.foreach(println)

@@ -1,0 +1,22 @@
+Hive performance
+
+1) Hive Partitions
+2) Map Side Join
+3) Vectorization
+
+	set hive.vectorized.execution.enabled= true;
+	Usually Hive process one row at a time if u enable vectorization it would process 1024 Rows at a time
+	but kills lot of RAM memory
+
+4) Parallel Execution
+	set hive.exec.parallel=true;
+
+5) Using TEZ  Engine (Not in Cloudera, Only Horton Works)
+	set hive.execution.engine = tez;
+
+6) Hive bucketing -- Join 
+
+	Partitions --- Folder creation --- ParittionedBy
+	Bucketing  --- File Creation --- clustered by (id) into 2 Bucketing
+				
+					1   2   3    4   5   6

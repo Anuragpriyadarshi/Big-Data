@@ -1,0 +1,42 @@
+Mysql 
+==============================
+
+mysql -uroot -pcloudera
+create database test;
+use test;
+
+CREATE TABLE customermoda(custid INT,firstname VARCHAR(20),createdt date);
+
+insert into customermoda values(1,'Arun','2015-09-20');
+insert into customermoda values(2,'srini','2015-09-21');
+insert into customermoda values(3,'vasu','2015-09-22');
+insert into customermoda values(4,'mohamed','2015-09-23');
+insert into customermoda values(5,'arun','2015-09-24');
+
+==============================
+Open Edge Node
+==============================
+
+
+sqoop import --connect jdbc:mysql://localhost/test --username root -password cloudera -m 1 --table customermoda --target-dir /user/cloudera/dataimportmod2
+
+hadoop fs -ls /user/cloudera/dataimportmod2
+hadoop fs -cat /user/cloudera/dataimportmod2/*
+
+==============================
+Mysql 
+==============================
+
+update customermoda set firstname='zeyo' where custid=3;
+select * from customermoda;
+
+==============================
+Open Edge Node
+==============================
+
+sqoop import --connect jdbc:mysql://localhost/test --username root -password cloudera -m 1 --table customermoda --target-dir /user/cloudera/dataimportmod2 --incremental lastmodified --check-column createdt --last-value 2015-09-22 --merge-key custid
+
+
+
+hadoop fs -ls /user/cloudera/dataimportmod2
+hadoop fs -cat /user/cloudera/dataimportmod2/*

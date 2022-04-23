@@ -1,0 +1,15 @@
+val df1 = spark.read.format("csv").option("header","true").load("file:///C:/data/file.txt")
+					
+					df1.show()
+					
+					val df2 = spark.read.format("csv").option("header","true").load("file:///C:/data/file2.txt")
+					
+					df2.show()
+					
+					
+					
+					val joindf = df1.join(df2,df1("id")===df2("custid"),"inner")
+					             .drop(df2("custid"))
+					             
+					
+					joindf.show()
