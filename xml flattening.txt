@@ -1,0 +1,101 @@
+Task 1 ----
+
+Read transactions.xml Using POSLog or Transaction as a rowTag
+Flatten that completely
+
+=====================================================================================================================
+package sparkpack
+import org.apache.spark.sql.functions._
+
+import org.apache.spark._
+import org.apache.spark.sql.functions._
+import sys.process._
+import org.apache.spark.SparkConf
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+import scala.io.Source._
+
+
+object sparkobj {
+
+case class schema(txnno:String,txndate:String,custno:String,amount:String,category:String,product:String,city:String,state:String,spendby:String)
+def main(args:Array[String]):Unit=
+
+{
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+
+				sc.setLogLevel("ERROR")
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+
+				val xmldf=spark
+				.read
+				.format("com.databricks.spark.xml")
+				.option("rowTag","POSLog")
+				.load("file:///C:/data/transactions.xml")
+				xmldf.show()
+				xmldf.printSchema()
+				xmldf.show()
+				xmldf.printSchema()
+
+				val flatdf1=xmldf.withColumn("Transaction",expr("explode(Transaction)"))
+				.withColumn("LineItem",expr("explode(Transaction.RetailTransaction.LineItem)"))
+				.withColumn("Total",expr("explode(Transaction.RetailTransaction.Total)"))
+
+				flatdf1.show()
+				flatdf1.printSchema()
+
+				val flatdf2=flatdf1.select(
+
+						col("Transaction.BusinessDayDate"),
+						col("Transaction.ControlTransaction.OperatorSignOff.*"),
+						col("Transaction.ControlTransaction.ReasonCode"),
+						col("Transaction.ControlTransaction._Version"),
+						col("Transaction.CurrencyCode"),
+						col("Transaction.EndDateTime"),
+						col("Transaction.RetailStoreID"),
+						col("Transaction.RetailTransaction.ItemCount"),
+						col("Transaction.RetailTransaction.PerformanceMetrics.*"),
+						col("Transaction.RetailTransaction.ReceiptDateTime"),
+						col("Transaction.RetailTransaction.TransactionCount"),
+						col("Transaction.RetailTransaction._Version"),
+						col("Transaction.SequenceNumber"),
+						col("Transaction.WorkstationID"),
+						col("LineItem.Sale.DiscountAmount"),
+						col("LineItem.Sale.ExtendedAmount"),
+						col("LineItem.Sale.ExtendedDiscountAmount"),
+						col("LineItem.Sale.ItemID"),
+						col("LineItem.Sale.Itemizers.*"),
+						col("LineItem.Sale.MerchandiseHierarchy.*"),
+						col("LineItem.Sale.OperatorSequence"),
+						col("LineItem.Sale.POSIdentity.*"),
+						col("LineItem.Sale.Quantity"),
+						col("LineItem.Sale.RegularSalesUnitPrice"),
+						col("LineItem.Sale.ReportCode"),
+						col("LineItem.Sale._ItemType"),
+						col("LineItem.SequenceNumber"),
+						col("LineItem.Tax.*"),
+						col("LineItem.Tender.Amount"),
+						col("LineItem.Tender.Authorization.*"),
+						col("LineItem.Tender.OperatorSequence"),
+						col("LineItem.Tender._TenderDescription"),
+						col("LineItem.Tender._TenderType"),
+						col("LineItem._EntryMethod"),
+						col("LineItem._weightItem"),
+						col("Total._TotalType"),
+						col("Total._VALUE")
+
+
+						)
+				flatdf2.show()
+				flatdf2.printSchema()
+}
+}
+
+
+

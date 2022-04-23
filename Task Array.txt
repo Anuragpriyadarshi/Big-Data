@@ -1,0 +1,115 @@
+Task 1 ----
+
+Flatten Pets.json using Select
+
+println("==========flatening data using select====================")
+				
+				val fldata=df.select(
+						col("Name"),
+						col("Mobile"),
+						col("address.*"),
+						col("status"),
+						explode(col("Pets")).as("Pets")
+						)
+					
+				fldata.show()
+				fldata.printSchema()
+
+Flatten Pets.json using withColumn --- optional
+
+println("==========flatening data using withColumn====================")
+				
+				val flattendf1 = df
+					.withColumn("Pets",expr("explode(Pets)"))
+					.withColumn("Permanent Address",expr("Address.`Permanent Address`"))
+					.withColumn("current Address",expr("Address.`current Address`"))
+					.drop("Address")
+				flattendf1.show()
+				flattendf1.printSchema()
+
+Task 2 ---
+
+donot.json
+Flatten it completely
+Revert it back 
+
+
+
+
+package sparkpack
+import org.apache.spark.sql.functions._
+
+import org.apache.spark._
+import org.apache.spark.sql.functions._
+import sys.process._
+import org.apache.spark.SparkConf
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+
+
+object sparkobj {
+
+case class schema(txnno:String,txndate:String,custno:String,amount:String,category:String,product:String,city:String,state:String,spendby:String)
+def main(args:Array[String]):Unit=
+
+{
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+
+				sc.setLogLevel("ERROR")
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+
+				val df=spark.read.format("json").option("multiline","true").load("file:///C:/Data/complexjson/donut.json")
+				df.show()
+				df.printSchema()
+
+				println("==========flatening data using select====================")
+
+				val fldata=df.select(
+						col("id"),
+						col("type"),
+						col("name"),
+						col("image.url").as("iu"),
+						col("image.width").as("iw"),
+						col("image.height").as("ih"),
+						col("thumbnail.url").as("tu"),
+						col("thumbnail.width").as("tw"),
+						col("thumbnail.height").as("th")
+						)
+
+				fldata.show()
+				fldata.printSchema()
+
+				println("==========Reverting data to original Hierarchy====================")
+
+				val compdata=fldata.select(
+						col("id"),    
+						col("type"),
+						col("name"),
+						struct(
+								col("iu").as("url"),
+								col("iw").as("width"),
+								col("ih").as("height")
+
+								).as("image"),
+						struct(
+								col("tu").as("url"),
+								col("tw").as("width"),
+								col("th").as("height")    
+								).as("thumbnail")
+
+
+						)
+				compdata.show()
+				compdata.printSchema()
+}
+
+}
+
+
+

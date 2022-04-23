@@ -1,0 +1,86 @@
+You have to hit this URL data using Scala
+You will get this data as String 
+String to Rdd
+Rdd to Dataframe
+Flatten  it
+
+
+
+=======================================================================================================================
+
+
+package sparkpack
+import org.apache.spark.sql.functions._
+
+import org.apache.spark._
+import org.apache.spark.sql.functions._
+import sys.process._
+import org.apache.spark.SparkConf
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+import scala.io.Source._
+
+
+object sparkobj {
+
+case class schema(txnno:String,txndate:String,custno:String,amount:String,category:String,product:String,city:String,state:String,spendby:String)
+def main(args:Array[String]):Unit=
+
+{
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+
+				sc.setLogLevel("ERROR")
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+
+				val urldata=fromURL("https://randomuser.me/api/0.8/?results=10").mkString
+				println(urldata)
+
+				//converting to RDD
+				val rdd=sc.parallelize(List(urldata))
+				//Reading RDD
+				val df=spark.read.json(rdd)
+				df.show()
+				df.printSchema()
+
+				//Flattening data
+
+				val fdata=df.withColumn("results",expr("explode(results)"))
+				fdata.show()
+				fdata.printSchema()
+
+				//complete flattening
+
+				val fdata2=fdata.select(
+
+						col("nationality"),
+						col("results.user.cell"),
+						col("results.user.dob"),
+						col("results.user.email"),
+						col("results.user.gender"),
+						col("results.user.location.*"),
+						col("results.user.md5"),
+						col("results.user.name.*"),
+						col("results.user.password"),
+						col("results.user.phone"),
+						col("results.user.picture.*"),
+						col("results.user.registered"),
+						col("results.user.salt"),
+						col("results.user.sha1"),
+						col("results.user.sha256"),
+						col("results.user.username"),
+						col("seed"),
+						col("version")
+
+
+
+						)
+				fdata2.show()
+				fdata2.printSchema()
+}
+}

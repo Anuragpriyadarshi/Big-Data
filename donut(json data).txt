@@ -1,0 +1,50 @@
+package sparkpack
+import org.apache.spark.sql.functions._
+
+import org.apache.spark._
+import org.apache.spark.sql.functions._
+import sys.process._
+import org.apache.spark.SparkConf
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+
+
+object sparkobj {
+
+case class schema(txnno:String,txndate:String,custno:String,amount:String,category:String,product:String,city:String,state:String,spendby:String)
+def main(args:Array[String]):Unit=
+
+{
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+
+				sc.setLogLevel("ERROR")
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+
+				val df=spark.read.format("json").option("multiline","true").load("file:///C:/Data/complexjson/donut.json")
+				df.show()
+				df.printSchema()
+
+				println("==========flatening data====================")
+
+				val fldata=df.select(
+						col("id"),
+						col("image.height").as("new height"),
+						col("image.url").as ("new url"),
+						col("image.width").as("new width"),
+						col("name"),
+						col("thumbnail.height").as("thumbheight"),
+						col("thumbnail.url").as("thumburl"),
+						col("thumbnail.width").as("thumbwidth"),
+						col("type")
+						)
+				fldata.show()
+				fldata.printSchema()
+}
+
+}

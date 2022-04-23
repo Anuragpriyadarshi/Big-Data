@@ -1,0 +1,69 @@
+package sparkpack
+import org.apache.spark.sql.functions._
+
+import org.apache.spark._
+import org.apache.spark.sql.functions._
+import sys.process._
+import org.apache.spark.SparkConf
+import org.apache.spark.sql._
+import org.apache.spark.sql.types._
+import scala.io.Source._
+
+
+object sparkobj {
+
+case class schema(txnno:String,txndate:String,custno:String,amount:String,category:String,product:String,city:String,state:String,spendby:String)
+def main(args:Array[String]):Unit=
+
+{
+
+		val conf = new SparkConf().setAppName("First").setMaster("local[*]")
+				val sc = new SparkContext(conf)
+
+				sc.setLogLevel("ERROR")
+				val spark = SparkSession
+				.builder()
+				.getOrCreate()		
+
+				import spark.implicits._
+
+				val df=spark.read.format("json").option("multiline","true").load("file:///C:/data/complexjson/users.json")
+				df.show()
+				df.printSchema()
+				val fdata=df.withColumn("users",expr("explode(users)"))
+				val flattendf2= fdata.select(
+
+
+						col("page"),
+						col("per_page"),
+						col("total"),
+						col("total_pages"),
+						col("users.*")
+
+						)
+
+
+				flattendf2.show()
+				flattendf2.printSchema()
+				val complexdf = flattendf2.groupBy("page","per_page","total","total_pages")
+				.agg(    
+
+						collect_list (
+
+
+								struct(      
+										col("emailAddress"),
+										col("firstName"),
+										col("lastName"),
+										col("phoneNumber"),
+										col("userId")               
+										)     
+
+								).alias("users")            
+
+
+						)
+				complexdf.show()
+				complexdf.printSchema()
+}
+}
